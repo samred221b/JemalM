@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
             hero: {
                 headline: "Jemal Mohammed Ahmed <span class=\"gradient-text\">Foreign Recruitment and Employment Agency</span>",
                 subheadline: "We specialize in sending skilled and dedicated workers to the Middle East — with trust, transparency, and care.",
-                description: "Jemal Mohammed Ahmed Foreign Employment Agency is your trusted partner in building international careers. We connect talented Ethiopian professionals with reputable employers in Kuwait and Saudi Arabia, ensuring ethical recruitment practices and comprehensive support throughout your journey.",
+                description: "Jemal Mohammed Ahmed Foreign Employment Agency is your trusted partner in building international careers. We connect talented Ethiopian professionals with reputable employers in Saudi Arabia, ensuring ethical recruitment practices and comprehensive support throughout your journey.",
                 applyNow: "Apply Now",
                 viewOpportunities: "View Opportunities"
             },
@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 title: "About Jemal Mohammed Ahmed",
                 subtitle: "Your Trusted Partner in Overseas Employment",
                 description1: "With over 15 years of experience in international recruitment, Jemal Mohammed Ahmed Foreign Employment Agency has become a trusted name in connecting Ethiopian talent with global opportunities. Our commitment to ethical practices, transparency, and comprehensive support sets us apart in the industry.",
-                description2: "We specialize in recruitment for the Middle East, particularly Saudi Arabia and Kuwait, ensuring that our workers receive fair treatment, competitive salaries, and proper working conditions. Our team provides end-to-end support from initial consultation to successful job placement.",
+                description2: "We specialize in recruitment for the Middle East, particularly Saudi Arabia, ensuring that our workers receive fair treatment, competitive salaries, and proper working conditions. Our team provides end-to-end support from initial consultation to successful job placement.",
                 description3: "As a fully licensed agency by the Ethiopian Ministry of Labor and Social Affairs, we operate in strict compliance with both Ethiopian and international labor laws. We believe in transparency, fair treatment, and creating opportunities that truly change lives.",
                 readMore: "Read More",
                 workersPlaced: "Workers Placed",
@@ -343,6 +343,110 @@ document.addEventListener('DOMContentLoaded', function() {
     const searchOverlay = document.getElementById('searchOverlay');
     const closeSearch = document.getElementById('closeSearch');
     const searchInput = document.getElementById('searchInput');
+    const searchResults = document.getElementById('searchResults');
+
+    // Search data
+    const searchData = [
+        // Jobs
+        { title: 'Hotel Receptionist', content: 'Kuwait hospitality customer service English', section: '#opportunities', category: 'Job' },
+        { title: 'Professional Driver', content: 'Saudi Arabia driver license driving', section: '#opportunities', category: 'Job' },
+        { title: 'Domestic Helper', content: 'Kuwait housekeeping cooking domestic work', section: '#opportunities', category: 'Job' },
+        { title: 'Construction Worker', content: 'Saudi Arabia construction building labor', section: '#opportunities', category: 'Job' },
+        { title: 'Healthcare Assistant', content: 'Kuwait healthcare medical nursing', section: '#opportunities', category: 'Job' },
+        { title: 'Restaurant Server', content: 'Saudi Arabia hospitality food service', section: '#opportunities', category: 'Job' },
+        { title: 'House Maid', content: 'Saudi Arabia domestic cleaning cooking', section: '#opportunities', category: 'Job' },
+        { title: 'Delivery Driver', content: 'Saudi Arabia delivery transport logistics', section: '#opportunities', category: 'Job' },
+        { title: 'Driver', content: 'Saudi Arabia driving personal commercial chauffeur', section: '#opportunities', category: 'Job' },
+        { title: 'Babysitting', content: 'Saudi Arabia childcare nanny children', section: '#opportunities', category: 'Job' },
+        { title: 'Cook', content: 'Saudi Arabia cooking chef kitchen food', section: '#opportunities', category: 'Job' },
+        { title: 'Cleaner', content: 'Saudi Arabia cleaning housekeeping office', section: '#opportunities', category: 'Job' },
+        
+        // Countries/Destinations
+        { title: 'Kuwait', content: 'Kuwait Middle East Gulf hospitality domestic healthcare', section: '#destinations', category: 'Country' },
+        { title: 'Saudi Arabia', content: 'Saudi Arabia Middle East Gulf construction hospitality drivers', section: '#destinations', category: 'Country' },
+        { title: 'Dubai (UAE)', content: 'Dubai UAE United Arab Emirates Middle East hospitality', section: '#destinations', category: 'Country' },
+        { title: 'Qatar', content: 'Qatar Middle East Gulf hospitality construction', section: '#destinations', category: 'Country' },
+        { title: 'Oman', content: 'Oman Middle East Gulf skilled workers industries', section: '#destinations', category: 'Country' },
+        { title: 'Jordan', content: 'Jordan Middle East healthcare technical services', section: '#destinations', category: 'Country' },
+        { title: 'Lebanon', content: 'Lebanon Middle East diverse employment opportunities', section: '#destinations', category: 'Country' },
+        { title: 'Bahrain', content: 'Bahrain Middle East Gulf new destination', section: '#destinations', category: 'Country' },
+        
+        // Services
+        { title: 'Recruitment Services', content: 'recruitment hiring staffing employment solutions', section: '#services', category: 'Service' },
+        { title: 'Visa Processing', content: 'visa processing immigration work permits', section: '#services', category: 'Service' },
+        { title: 'Pre-Departure Training', content: 'training orientation cultural awareness language', section: '#services', category: 'Service' },
+        { title: 'Travel Arrangements', content: 'travel flight booking transportation', section: '#services', category: 'Service' },
+        { title: 'Continuous Support', content: 'support welfare monitoring assistance', section: '#services', category: 'Service' },
+        
+        // About
+        { title: 'About Jemal Mohammed', content: 'company history experience recruitment agency Ethiopia', section: '#about', category: 'About' },
+        { title: 'Government Approved', content: 'licensed approved ministry labor social affairs', section: '#about', category: 'About' },
+        { title: 'Ethical Recruitment', content: 'ethical fair practices worker protection', section: '#about', category: 'About' },
+        
+        // Contact
+        { title: 'Contact Us', content: 'phone email address office hours', section: '#contact', category: 'Contact' }
+    ];
+
+    // Perform search
+    function performSearch(query) {
+        if (!query.trim()) {
+            searchResults.innerHTML = '<div class="no-results">Start typing to search...</div>';
+            return;
+        }
+
+        const results = searchData.filter(item => {
+            const searchTerm = query.toLowerCase();
+            return item.title.toLowerCase().includes(searchTerm) || 
+                   item.content.toLowerCase().includes(searchTerm) ||
+                   item.category.toLowerCase().includes(searchTerm);
+        });
+
+        if (results.length === 0) {
+            searchResults.innerHTML = '<div class="no-results">No results found for "' + query + '"</div>';
+            return;
+        }
+
+        const resultsHTML = results.map(result => `
+            <div class="search-result-item" data-section="${result.section}">
+                <div class="result-category">${result.category}</div>
+                <h4>${result.title}</h4>
+                <p>${result.content.substring(0, 100)}${result.content.length > 100 ? '...' : ''}</p>
+            </div>
+        `).join('');
+
+        searchResults.innerHTML = resultsHTML;
+
+        // Add click handlers for results
+        document.querySelectorAll('.search-result-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const sectionId = this.getAttribute('data-section');
+                searchOverlay.classList.remove('active');
+                searchInput.value = '';
+                searchResults.innerHTML = '';
+
+                // Scroll to section
+                if (sectionId.startsWith('#')) {
+                    const targetSection = document.querySelector(sectionId);
+                    if (targetSection) {
+                        const offsetTop = targetSection.offsetTop - 80;
+                        window.scrollTo({
+                            top: offsetTop,
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+            });
+        });
+    }
+
+    // Debounce search
+    let searchTimeout;
+    function debounceSearch() {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+            performSearch(searchInput.value);
+        }, 300);
+    }
 
     console.log('Search button element:', searchButton);
     console.log('Search overlay element:', searchOverlay);
@@ -353,34 +457,115 @@ document.addEventListener('DOMContentLoaded', function() {
             if (searchOverlay.classList.contains('active')) {
                 searchOverlay.classList.remove('active');
                 console.log('Search bar closed');
+                searchInput.value = '';
+                searchResults.innerHTML = '';
             } else {
                 searchOverlay.classList.add('active');
                 console.log('Active class added to overlay');
                 setTimeout(() => searchInput.focus(), 300);
+                performSearch(''); // Show initial state
             }
         });
 
         closeSearch.addEventListener('click', () => {
             console.log('Close button clicked');
             searchOverlay.classList.remove('active');
+            searchInput.value = '';
+            searchResults.innerHTML = '';
         });
 
         searchOverlay.addEventListener('click', (e) => {
             if (e.target === searchOverlay) {
                 console.log('Overlay clicked outside');
                 searchOverlay.classList.remove('active');
+                searchInput.value = '';
+                searchResults.innerHTML = '';
             }
         });
+
+        // Search input handler
+        searchInput.addEventListener('input', debounceSearch);
 
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && searchOverlay.classList.contains('active')) {
                 console.log('Escape key pressed');
                 searchOverlay.classList.remove('active');
+                searchInput.value = '';
+                searchResults.innerHTML = '';
             }
         });
     } else {
         console.log('Search button or overlay not found');
     }
+
+    // ===================================
+    // GALLERY MODAL FUNCTIONALITY
+    // ===================================
+
+    // Get modal elements
+    const galleryModal = document.getElementById('galleryModal');
+    const galleryModalImg = document.getElementById('galleryModalImg');
+    const galleryModalTitle = document.getElementById('galleryModalTitle');
+    const galleryModalText = document.getElementById('galleryModalText');
+    const galleryModalClose = document.querySelector('.gallery-modal-close');
+
+    // Add click event listeners to all gallery items
+    document.querySelectorAll('.gallery-item').forEach(item => {
+        item.addEventListener('click', function() {
+            const img = this.querySelector('img');
+            const overlay = this.querySelector('.gallery-overlay');
+            const name = overlay.querySelector('h4').textContent;
+            const job = overlay.querySelector('p').textContent;
+            const location = overlay.querySelector('.location-badge').textContent;
+
+            // Longer, more detailed descriptions for each gallery item
+            const descriptions = {
+                'Ahmed - Riyadh': 'Ahmed transformed his construction expertise into a thriving career in Riyadh. Starting as a skilled laborer, he quickly advanced through dedication and hard work, now leading major construction projects that shape Saudi Arabia\'s growing skyline. His journey exemplifies how determination and opportunity create success stories in the Kingdom.',
+                'Sarah - Dubai': 'Sarah\'s journey from hospitality training to hotel management in Dubai showcases her exceptional customer service skills and leadership abilities. She has mastered the art of creating memorable guest experiences, rising through the ranks to become a respected supervisor who inspires her team to deliver excellence every day.',
+                'Youssef - Cairo': 'Youssef brought his technical expertise to Riyadh, where he develops innovative software solutions that drive digital transformation. His coding skills and problem-solving abilities have made him an invaluable asset to tech companies in Saudi Arabia, contributing to the Kingdom\'s vision for a digital future.',
+                'Leila - Beirut': 'Leila\'s marketing brilliance shines brightly in Riyadh, where she crafts compelling campaigns that connect brands with Saudi audiences. Her creative vision and strategic thinking have helped businesses reach new heights, proving that innovative marketing knows no borders in the global marketplace.',
+                'Michael - Dammam': 'Michael\'s engineering expertise found the perfect home in Dammam\'s dynamic industrial landscape. His project management skills and technical knowledge have been instrumental in developing infrastructure that supports Saudi Arabia\'s economic growth and industrial expansion.',
+                'Fatima - Medina': 'Fatima brings compassion and dedication to healthcare in Medina, providing exceptional care to patients in one of Islam\'s most sacred cities. Her commitment to healing and patient-centered approach makes her a valued healthcare professional in Saudi Arabia\'s medical community.',
+                'Omar - Riyadh': 'Omar leads complex projects in Riyadh with strategic vision and meticulous planning. His project management expertise ensures successful delivery of initiatives that contribute to Saudi Arabia\'s development goals, inspiring teams to achieve excellence through collaborative leadership.',
+                'Nadia - Jeddah': 'Nadia\'s financial acumen drives success in Jeddah\'s growing business sector. Her analytical skills and strategic financial planning help businesses thrive in Saudi Arabia\'s dynamic economy, turning complex financial challenges into opportunities for growth and prosperity.'
+            };
+
+            // Get description based on name, default to a general longer description
+            const description = descriptions[name] || 'This remarkable professional found success and fulfillment in Saudi Arabia through dedication, hard work, and the pursuit of excellence. Their journey represents the countless opportunities available in the Kingdom for skilled individuals committed to building a better future. From humble beginnings to professional achievement, their story inspires others to pursue their dreams in this land of opportunity.';
+
+            // Populate modal with data
+            galleryModalImg.src = img.src;
+            galleryModalImg.alt = img.alt;
+            galleryModalTitle.textContent = name;
+            galleryModalText.textContent = description;
+
+            // Show modal
+            galleryModal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        });
+    });
+
+    // Close modal when clicking the close button
+    galleryModalClose.addEventListener('click', () => {
+        galleryModal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    });
+
+    // Close modal when clicking outside the image
+    galleryModal.addEventListener('click', (e) => {
+        if (e.target === galleryModal) {
+            galleryModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+    });
+
+    // Close modal on escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && galleryModal.style.display === 'block') {
+            galleryModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+    });
 
     // ===================================
     // MOUSE-FOLLOWING PARTICLE EFFECTS
